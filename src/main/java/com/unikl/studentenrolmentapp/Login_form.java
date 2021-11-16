@@ -138,7 +138,10 @@ public class Login_form extends javax.swing.JFrame {
         
         if (inputID.equals("admin") && passwordString.equals("admin123")){
             String welcomeMessage = "Hello Admin!";
-            JOptionPane.showMessageDialog(new JFrame(),welcomeMessage); 
+            JOptionPane.showMessageDialog(new JFrame(),welcomeMessage);
+            this.dispose();
+            AdminDashboard adminDashboard = new AdminDashboard(database);
+            adminDashboard.setVisible(true);
         }
         else{
             Student temp = new Student();
