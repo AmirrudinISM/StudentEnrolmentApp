@@ -12,17 +12,17 @@ package com.unikl.studentenrolmentapp;
 public class Enrolment {
     private String studentID;
     private String courseID;
-    private char status;
-    private int semester;
+    private String status;
+    
     //TO DO:
     //Savekan data ni dalam text file. Refer OOP punya project
     //dan tambah field credit hours untuk kira total credit hours student.
 
-    public Enrolment(String studentID, String courseID, char status, int semester) {
+    public Enrolment(String studentID, String courseID, String status) {
         this.studentID = studentID;
         this.courseID = courseID;
         this.status = status;
-        this.semester = semester;
+        
     }
 
     public String getStudentID() {
@@ -33,13 +33,11 @@ public class Enrolment {
         return courseID;
     }
 
-    public char getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public int getSemester() {
-        return semester;
-    }
+   
 
     public void setStudentID(String studentID) {
         this.studentID = studentID;
@@ -49,13 +47,15 @@ public class Enrolment {
         this.courseID = courseID;
     }
 
-    public void setStatus(char status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public void setSemester(int semester) {
-        this.semester = semester;
+    @Override
+    public String toString() {
+        return "Student ID: " + this.studentID + ", Course ID: " + this.courseID + ", Status: " + this.status;
     }
+
     
     
 }

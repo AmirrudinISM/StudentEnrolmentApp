@@ -65,6 +65,14 @@ public class Database {
         return temp;
     }
     
-    
+    public static void printTable(String tableName){
+        if (tableName == "ENROLMENT"){
+            for (int i = 0; i < tableEnrolment.size(); i++){
+                System.out.println(tableEnrolment.get(i));
+            }
+        }
+        
+        System.out.println("-------------------------------");
+    }
     
 }

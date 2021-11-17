@@ -59,12 +59,7 @@ public class Course {
     
     @Override
     public String toString(){
-        return
-                "ID: " + this.id + "\n" +
-                "Course Title: " + this.title + "\n" +
-                "Credit Hours: " + this.creditHour + "\n" +
-                "Description: " + this.description + "\n"
-                ;
+        return this.id + " " + this.title;
     }
     
     
