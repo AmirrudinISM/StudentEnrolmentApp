@@ -12,6 +12,8 @@ package com.unikl.studentenrolmentapp;
 public class Enrolment {
     private String studentID;
     private String courseID;
+    private String courseTitle;
+    private int courseCreditHours;
     private String status;
     
     //TO DO:
@@ -23,6 +25,22 @@ public class Enrolment {
         this.courseID = courseID;
         this.status = status;
         
+    }
+
+    public Enrolment(String studentID, String courseID, String courseTitle, int courseCreditHours, String status) {
+        this.studentID = studentID;
+        this.courseID = courseID;
+        this.courseTitle = courseTitle;
+        this.courseCreditHours = courseCreditHours;
+        this.status = status;
+    }
+
+    public String getCourseTitle() {
+        return courseTitle;
+    }
+
+    public void setCourseTitle(String courseTitle) {
+        this.courseTitle = courseTitle;
     }
 
     public String getStudentID() {
@@ -51,6 +69,15 @@ public class Enrolment {
         this.status = status;
     }
 
+    public int getCourseCreditHours() {
+        return courseCreditHours;
+    }
+
+    public void setCourseCreditHours(int courseCreditHours) {
+        this.courseCreditHours = courseCreditHours;
+    }
+    
+    
     @Override
     public String toString() {
         return "Student ID: " + this.studentID + ", Course ID: " + this.courseID + ", Status: " + this.status;

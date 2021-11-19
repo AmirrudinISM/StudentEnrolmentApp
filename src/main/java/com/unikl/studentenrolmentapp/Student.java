@@ -16,6 +16,7 @@ public class Student {
     private String name;
     private String program;
     private int accumulatedCreditHours;
+    private int requestedCreditHours;
     
 
 
@@ -25,6 +26,7 @@ public class Student {
         this.name = "Dummy Student";
         this.program  = "Bachelor of Software Engineering (Honours)";
         this.accumulatedCreditHours = 0;
+        this.requestedCreditHours = 0;
         
     }
     
@@ -34,6 +36,7 @@ public class Student {
         this.name = name;
         this.program  = program;
         this.accumulatedCreditHours = 0;
+        this.requestedCreditHours = 0;
         
     }
     
@@ -43,7 +46,7 @@ public class Student {
         this.name = name;
         this.program  = program;
         this.accumulatedCreditHours = 0;
-        
+        this.requestedCreditHours = 0;
     }
     
     @Override
@@ -105,6 +108,14 @@ public class Student {
 
     public void setAccumulatedCreditHours(int accumulatedCreditHours) {
         this.accumulatedCreditHours = accumulatedCreditHours;
+    }
+
+    public int getRequestedCreditHours() {
+        return requestedCreditHours;
+    }
+
+    public void setRequestedCreditHours(int requestedCreditHours) {
+        this.requestedCreditHours = requestedCreditHours;
     }
     
     

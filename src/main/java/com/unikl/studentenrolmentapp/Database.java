@@ -5,6 +5,9 @@
  */
 package com.unikl.studentenrolmentapp;
 import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Amirr
@@ -75,4 +78,74 @@ public class Database {
         System.out.println("-------------------------------");
     }
     
+    public static Student getStudent(String studentID){
+        Student currStudent = null;
+        for(int i = 0; i < tableStudent.size(); i++){
+            if (tableStudent.get(i).getId().equals(studentID)){
+                currStudent = tableStudent.get(i);
+            }
+        }
+        return currStudent;
+    }
+    
+    public static DefaultTableModel getRequestedEnrolmentModel(String stdID){
+        DefaultTableModel model = new DefaultTableModel();
+        Vector<String> dataVector = new Vector<String>();
+        Vector<String> columnNames = new Vector<String>();
+        columnNames.addElement("Course Title");
+        columnNames.addElement("Credit Hours");
+        columnNames.addElement("Status");
+        model.setColumnIdentifiers(columnNames);
+        
+        for (int i = 0; i < tableEnrolment.size(); i++){
+            String currSrudentID = tableEnrolment.get(i).getStudentID();
+            if(currSrudentID.equals(stdID)){
+                dataVector.add(tableEnrolment.get(i).getCourseTitle());
+                dataVector.add(String.valueOf(tableEnrolment.get(i).getCourseCreditHours()));
+                dataVector.add(tableEnrolment.get(i).getStatus());
+                model.addRow(dataVector);
+            }
+        }
+        
+        return model;
+    }
+    
+    
+    
+    public static DefaultTableModel getAllFromTableStudent(){
+        Vector<String> columnNames = new Vector<String>();
+        columnNames.addElement("ID");
+        columnNames.addElement("Name");
+        columnNames.addElement("Program"); 
+        columnNames.addElement("Accumulated Credit Hours");
+        
+        DefaultTableModel model = new DefaultTableModel(columnNames,0);
+        
+        
+        
+        for (int i = 0; i < tableStudent.size(); i++){
+            
+            String studentID = tableStudent.get(i).getId();
+            String studentName = tableStudent.get(i).getName();
+            String studentProgram = tableStudent.get(i).getProgram();
+            int studentCreditHours = tableStudent.get(i).getAccumulatedCreditHours();
+            Object[] data = {studentID, studentName, studentProgram, studentCreditHours};
+            model.addRow(data);
+        }
+        
+        return model;
+    }
+    
+    public static int select_SumOfRequestedCreditHours_Where_StudentID(String stdID){
+        int sum = 0;
+        for (int i = 0; i < tableEnrolment.size(); i++){
+            String currSrudentID = tableEnrolment.get(i).getStudentID();
+            if(currSrudentID.equals(stdID)){
+                
+                sum += tableEnrolment.get(i).getCourseCreditHours();
+                
+            }
+        }
+        return sum;
+    }
 }
