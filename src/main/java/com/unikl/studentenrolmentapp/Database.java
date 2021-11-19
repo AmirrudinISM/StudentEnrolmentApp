@@ -6,6 +6,7 @@
 package com.unikl.studentenrolmentapp;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -109,4 +110,42 @@ public class Database {
         return model;
     }
     
+    
+    
+    public static DefaultTableModel getAllFromTableStudent(){
+        Vector<String> columnNames = new Vector<String>();
+        columnNames.addElement("ID");
+        columnNames.addElement("Name");
+        columnNames.addElement("Program"); 
+        columnNames.addElement("Accumulated Credit Hours");
+        
+        DefaultTableModel model = new DefaultTableModel(columnNames,0);
+        
+        
+        
+        for (int i = 0; i < tableStudent.size(); i++){
+            
+            String studentID = tableStudent.get(i).getId();
+            String studentName = tableStudent.get(i).getName();
+            String studentProgram = tableStudent.get(i).getProgram();
+            int studentCreditHours = tableStudent.get(i).getAccumulatedCreditHours();
+            Object[] data = {studentID, studentName, studentProgram, studentCreditHours};
+            model.addRow(data);
+        }
+        
+        return model;
+    }
+    
+    public static int select_SumOfRequestedCreditHours_Where_StudentID(String stdID){
+        int sum = 0;
+        for (int i = 0; i < tableEnrolment.size(); i++){
+            String currSrudentID = tableEnrolment.get(i).getStudentID();
+            if(currSrudentID.equals(stdID)){
+                
+                sum += tableEnrolment.get(i).getCourseCreditHours();
+                
+            }
+        }
+        return sum;
+    }
 }

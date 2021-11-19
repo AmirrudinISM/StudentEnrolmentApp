@@ -32,7 +32,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         if(database.tableEnrolment.size() > 0){
             tblRequestAddDrop.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId()));
         }
-        
+        lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
     }
 
     /**
@@ -271,7 +271,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         Object courseData[] = {selectedCourse.getTitle(), selectedCourse.getCreditHour(), enrolment.getStatus()};
         DefaultTableModel tblModel = (DefaultTableModel)tblRequestAddDrop.getModel();
         tblModel.addRow(courseData);
-        
+        lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
         
         
         
