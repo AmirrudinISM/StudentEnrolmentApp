@@ -5,9 +5,12 @@
  */
 package com.unikl.studentenrolmentapp;
 
+import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import static javax.swing.JOptionPane.showMessageDialog;
+import javax.swing.table.TableModel;
 /**
  *
  * @author Amirrudin
@@ -28,9 +31,12 @@ public class StudentDashboard extends javax.swing.JFrame {
         lblID.setText(loggedInStudent.getId());
         lblName.setText(loggedInStudent.getName());
         lblProgram.setText(loggedInStudent.getProgram());
-        lblCreditHours.setText(Integer.toString(loggedInStudent.getAccumulatedCreditHours()));
+        lblCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId(),"CURRENTLY TAKING")));
+        lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
+        
         if(database.tableEnrolment.size() > 0){
             tblRequestAddDrop.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId()));
+            tblEnrolledCourses.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(), "CURRENTLY TAKING"));
         }
         lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
     }
@@ -141,6 +147,11 @@ public class StudentDashboard extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3"
             }
         ));
+        tblEnrolledCourses.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEnrolledCoursesMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblEnrolledCourses);
 
         scrollPane1.add(jScrollPane2);
@@ -302,22 +313,22 @@ public class StudentDashboard extends javax.swing.JFrame {
 
     private void btnRegisterSemesterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterSemesterActionPerformed
         // TODO add your handling code here:
-        var checkdata= database.tableEnrolment.stream().filter(x -> x.getStudentID().equalsIgnoreCase(loggedInStudent.getId()) && x.getStatus().equals("PENDING ADD")).findFirst().orElse(null);
+            var checkdata= database.tableEnrolment.stream().filter(x -> x.getStudentID().equalsIgnoreCase(loggedInStudent.getId()) && x.getStatus().equals("PENDING ")).findFirst().orElse(null);
         
         if(checkdata == null){
    
           System.out.println("before reg" + loggedInStudent.getIsRegistered());
             if(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId()) < 12){
                 showMessageDialog(null, "Credit hours do not meet minimum requirement");     
-            }else if(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId()) >23){
+            }else if(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId()) >21){
                 showMessageDialog(null, "Exceed credit hours requirement");     
             }else{
                      //do semester registration
                    loggedInStudent.setIsRegistered(true);
                            
                    System.out.println("Registered" + loggedInStudent.getIsRegistered());
-                   lblCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
-                       lblRequestedCreditHours.setText("0");
+                   lblCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId(),"CURRENTLY TAKING")));
+                       lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
                    showMessageDialog(null, "Successfull register the semester");    
             }
             
@@ -326,6 +337,26 @@ public class StudentDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRegisterSemesterActionPerformed
 
+    private void tblEnrolledCoursesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEnrolledCoursesMouseClicked
+
+        int i =tblEnrolledCourses.getSelectedRow();
+        TableModel model=tblEnrolledCourses.getModel();
+        System.out.println("selected row="+ i);
+        String courseTitle=model.getValueAt(i,0).toString();
+        int dropConfirmation=JOptionPane.showConfirmDialog(null, 
+                                  "Do you want to drop this course "+ model.getValueAt(i,0).toString() +"?", 
+                                  "Drop Course",
+                                  JOptionPane.YES_NO_OPTION); 
+        
+        if (dropConfirmation == JOptionPane.YES_OPTION) {
+
+                database.dropCourse(loggedInStudent.getId(),"PENDING DROP",courseTitle);
+                tblEnrolledCourses.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(), "CURRENTLY TAKING"));
+                tblRequestAddDrop.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId()));
+        }
+    }//GEN-LAST:event_tblEnrolledCoursesMouseClicked
+
+   
     /**
      * @param args the command line arguments
      */

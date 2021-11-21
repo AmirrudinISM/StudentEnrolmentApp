@@ -34,6 +34,10 @@ public class Database {
         tableStudent.add(test3);
         tableStudent.add(new Student("000000","asd","Test Student", "Test Program"));
         
+        Enrolment testEnrolment = new Enrolment("000000","ISB42603","ADVANCED PROGRAMMING",3,"CURRENTLY TAKING"); 
+        tableEnrolment.add(testEnrolment);
+       
+        
         Course course1 = new Course("ISB42603", "ADVANCED PROGRAMMING", 3, "Learn Full-stack development using ASP.NET core MVC Framework");
         Course course2 = new Course("ISB42403", "WEB-APPLICATION DEVELOPMENT", 3, "Learn Full-stack development using ASP.NET Framework");
         Course course3 = new Course("ISB37603", "SOFTWARE DEVELOPMENT & INTEGRATION", 3, "This course aims to teach student on how to use a systematic approach to developing software that meets industry standard by introducind software patterns and architecture as well as emphasizing on sustainable software design");
@@ -98,8 +102,32 @@ public class Database {
         model.setColumnIdentifiers(columnNames);
         
         for (int i = 0; i < tableEnrolment.size(); i++){
+              String courseStatus = tableEnrolment.get(i).getStatus();
             String currSrudentID = tableEnrolment.get(i).getStudentID();
-            if(currSrudentID.equals(stdID)){
+            if(currSrudentID.equals(stdID)&& (courseStatus.equals("PENDING ADD") || courseStatus.equals("PENDING DROP"))){
+                dataVector.add(tableEnrolment.get(i).getCourseTitle());
+                dataVector.add(String.valueOf(tableEnrolment.get(i).getCourseCreditHours()));
+                dataVector.add(tableEnrolment.get(i).getStatus());
+                model.addRow(dataVector);
+            }
+        }
+        
+        return model;
+    }
+    
+        public static DefaultTableModel getRequestedEnrolmentModel(String stdID, String status){
+        DefaultTableModel model = new DefaultTableModel();
+        Vector<String> dataVector = new Vector<String>();
+        Vector<String> columnNames = new Vector<String>();
+        columnNames.addElement("Course Title");
+        columnNames.addElement("Credit Hours");
+        columnNames.addElement("Status");
+        model.setColumnIdentifiers(columnNames);
+        
+        for (int i = 0; i < tableEnrolment.size(); i++){
+            String currSrudentID = tableEnrolment.get(i).getStudentID();
+              String courseStatus = tableEnrolment.get(i).getStatus();
+            if(currSrudentID.equals(stdID) && courseStatus.equals(status)){
                 dataVector.add(tableEnrolment.get(i).getCourseTitle());
                 dataVector.add(String.valueOf(tableEnrolment.get(i).getCourseCreditHours()));
                 dataVector.add(tableEnrolment.get(i).getStatus());
@@ -140,11 +168,40 @@ public class Database {
         int sum = 0;
         for (int i = 0; i < tableEnrolment.size(); i++){
             String currSrudentID = tableEnrolment.get(i).getStudentID();
-            if(currSrudentID.equals(stdID)){
+            String courseStatus = tableEnrolment.get(i).getStatus();
+            if(currSrudentID.equals(stdID) && courseStatus.equals("PENDING ADD")){
                 
                 sum += tableEnrolment.get(i).getCourseCreditHours();
                 
             }
+        }
+        return sum;
+    }
+    
+    public void dropCourse(String stdID,String status, String title){
+           for (int i = 0; i < tableEnrolment.size(); i++){
+            String currSrudentID = tableEnrolment.get(i).getStudentID();
+            String courseStatus = tableEnrolment.get(i).getStatus();
+            String courseTitle= tableEnrolment.get(i).getCourseTitle();
+              if(currSrudentID.equals(stdID) && courseStatus.equals("CURRENTLY TAKING") && courseTitle.equals(title)){
+                
+                tableEnrolment.get(i).setStatus(status);
+                
+            }
+           }
+    }
+    
+        public static int select_SumOfRequestedCreditHours_Where_StudentID(String stdID, String status){
+            int sum = 0;
+            for (int i = 0; i < tableEnrolment.size(); i++){
+                String currSrudentID = tableEnrolment.get(i).getStudentID();
+                String courseStatus = tableEnrolment.get(i).getStatus();
+                
+                if(currSrudentID.equals(stdID) && courseStatus.equals(status)){
+                
+                    sum += tableEnrolment.get(i).getCourseCreditHours();
+                
+                }
         }
         return sum;
     }
