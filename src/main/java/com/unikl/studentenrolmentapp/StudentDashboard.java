@@ -7,7 +7,7 @@ package com.unikl.studentenrolmentapp;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
-
+import static javax.swing.JOptionPane.showMessageDialog;
 /**
  *
  * @author Amirrudin
@@ -262,16 +262,32 @@ public class StudentDashboard extends javax.swing.JFrame {
         
         //get course object from dropdown table
         Course selectedCourse = (Course) dropDownCourse.getSelectedItem();
+        //do checking first
         
-        //create new enrolment record
-        Enrolment enrolment = new Enrolment(loggedInStudent.getId(),selectedCourse.getId(), selectedCourse.getTitle(), selectedCourse.getCreditHour(), "PENDING ADD");
-        database.tableEnrolment.add(enrolment);
-        database.printTable("ENROLMENT");
-        //create new object to be written to the table view
-        Object courseData[] = {selectedCourse.getTitle(), selectedCourse.getCreditHour(), enrolment.getStatus()};
-        DefaultTableModel tblModel = (DefaultTableModel)tblRequestAddDrop.getModel();
-        tblModel.addRow(courseData);
-        lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
+     
+       
+       
+      
+        var checkdata= database.tableEnrolment.stream().filter(x -> x.getStudentID().equalsIgnoreCase(loggedInStudent.getId()) && x.getCourseID().equalsIgnoreCase(selectedCourse.getId())).findFirst().orElse(null);
+         System.out.println("run" + checkdata);
+        if(checkdata == null){
+            //create new enrolment record
+            Enrolment enrolment = new Enrolment(loggedInStudent.getId(),selectedCourse.getId(), selectedCourse.getTitle(), selectedCourse.getCreditHour(), "PENDING ADD");
+            database.tableEnrolment.add(enrolment);
+            database.printTable("ENROLMENT");
+            
+            //create new object to be written to the table view
+            Object courseData[] = {selectedCourse.getTitle(), selectedCourse.getCreditHour(), enrolment.getStatus()};
+            DefaultTableModel tblModel = (DefaultTableModel)tblRequestAddDrop.getModel();
+            tblModel.addRow(courseData);
+            lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
+      
+        }else{
+          
+            showMessageDialog(null, "You already choose this course");      
+        }
+        
+       
         
         
         
