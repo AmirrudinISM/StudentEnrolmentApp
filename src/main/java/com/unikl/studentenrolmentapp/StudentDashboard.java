@@ -145,16 +145,19 @@ public class StudentDashboard extends javax.swing.JFrame {
 
         scrollPane1.add(jScrollPane2);
 
-        jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel8.setText("Add/Drop Request");
 
-        jLabel9.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel9.setText("Current Enrolment");
 
         btnDrop.setText("Drop");
 
         btnRegisterSemester.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegisterSemester.setText("Register Semester");
+        btnRegisterSemester.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterSemesterActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -167,23 +170,22 @@ public class StudentDashboard extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(dropDownCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSelectCourse, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5)
-                                .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel5)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jLabel6)
-                                        .addComponent(jLabel7))
-                                    .addGap(28, 28, 28)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(lblName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblProgram, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblCreditHours, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(lblRequestedCreditHours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel7))
+                                .addGap(28, 28, 28)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(lblName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblProgram, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblCreditHours, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblRequestedCreditHours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(btnRegisterSemester, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(49, 49, 49)
@@ -263,11 +265,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         //get course object from dropdown table
         Course selectedCourse = (Course) dropDownCourse.getSelectedItem();
         //do checking first
-        
-     
-       
-       
-      
+
         var checkdata= database.tableEnrolment.stream().filter(x -> x.getStudentID().equalsIgnoreCase(loggedInStudent.getId()) && x.getCourseID().equalsIgnoreCase(selectedCourse.getId())).findFirst().orElse(null);
          System.out.println("run" + checkdata);
         if(checkdata == null){
@@ -299,6 +297,30 @@ public class StudentDashboard extends javax.swing.JFrame {
         Login_form loginForm = new Login_form(database);
         loginForm.setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnRegisterSemesterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterSemesterActionPerformed
+        // TODO add your handling code here:
+        var checkdata= database.tableEnrolment.stream().filter(x -> x.getStudentID().equalsIgnoreCase(loggedInStudent.getId()) && x.getStatus().equals("PENDING ADD")).findFirst().orElse(null);
+        
+        if(checkdata == null){
+   
+          System.out.println("before reg" + loggedInStudent.getIsRegistered());
+            if(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId()) < 12){
+                showMessageDialog(null, "Credit hours do not meet minimum requirement");     
+            }else if(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId()) >23){
+                showMessageDialog(null, "Exceed credit hours requirement");     
+            }else{
+                     //do semester registration
+                   loggedInStudent.setIsRegistered(true);
+                           
+                   System.out.println("Registered" + loggedInStudent.getIsRegistered());
+                   showMessageDialog(null, "Successfull register the semester");    
+            }
+            
+        }else{
+               showMessageDialog(null, "You need to wait until all subject has been approve by academic advisor first before you can register the semester");      
+        }
+    }//GEN-LAST:event_btnRegisterSemesterActionPerformed
 
     /**
      * @param args the command line arguments

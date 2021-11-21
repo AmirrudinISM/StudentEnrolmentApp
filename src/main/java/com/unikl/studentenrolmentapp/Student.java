@@ -18,6 +18,16 @@ public class Student {
     private int accumulatedCreditHours;
     private int requestedCreditHours;
     
+    private boolean isRegistered;
+
+    public void setIsRegistered(boolean isRegistered) {
+        this.isRegistered = isRegistered;
+    }
+
+    public boolean getIsRegistered() {
+        return isRegistered;
+    }
+    
 
 
     public Student() {
@@ -27,6 +37,7 @@ public class Student {
         this.program  = "Bachelor of Software Engineering (Honours)";
         this.accumulatedCreditHours = 0;
         this.requestedCreditHours = 0;
+        this.isRegistered=false;
         
     }
     
