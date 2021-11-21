@@ -273,12 +273,14 @@ public class StudentDashboard extends javax.swing.JFrame {
             Enrolment enrolment = new Enrolment(loggedInStudent.getId(),selectedCourse.getId(), selectedCourse.getTitle(), selectedCourse.getCreditHour(), "PENDING ADD");
             database.tableEnrolment.add(enrolment);
             database.printTable("ENROLMENT");
+    
             
             //create new object to be written to the table view
             Object courseData[] = {selectedCourse.getTitle(), selectedCourse.getCreditHour(), enrolment.getStatus()};
             DefaultTableModel tblModel = (DefaultTableModel)tblRequestAddDrop.getModel();
             tblModel.addRow(courseData);
             lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
+        
       
         }else{
           
@@ -314,6 +316,8 @@ public class StudentDashboard extends javax.swing.JFrame {
                    loggedInStudent.setIsRegistered(true);
                            
                    System.out.println("Registered" + loggedInStudent.getIsRegistered());
+                   lblCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
+                       lblRequestedCreditHours.setText("0");
                    showMessageDialog(null, "Successfull register the semester");    
             }
             
