@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 package com.unikl.studentenrolmentapp;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -48,6 +51,19 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jLabel2.setText("Student List");
 
+        tblStudents.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tblStudents.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblStudentsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblStudents);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
@@ -111,6 +127,25 @@ public class AdminDashboard extends javax.swing.JFrame {
         loginForm.setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
+    //Responsive Table
+    
+
+    
+    private void tblStudentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStudentsMouseClicked
+        // TODO add your handling code here:
+        int index = tblStudents.getSelectedRow();
+        TableModel model = tblStudents.getModel();
+        
+        String StudentId = model.getValueAt(index, 0).toString();
+        JOptionPane.showMessageDialog(null, "Student Id:" + StudentId);
+        
+        jTable2.setModel(database.getRequestedEnrolmentModel(StudentId));
+        
+
+        
+       
+    }//GEN-LAST:event_tblStudentsMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -154,7 +189,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
+    public javax.swing.JTable jTable2;
     private javax.swing.JTable tblStudents;
     // End of variables declaration//GEN-END:variables
 }

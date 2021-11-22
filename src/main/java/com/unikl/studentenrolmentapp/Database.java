@@ -94,7 +94,6 @@ public class Database {
     
     public static DefaultTableModel getRequestedEnrolmentModel(String stdID){
         DefaultTableModel model = new DefaultTableModel();
-        Vector<String> dataVector = new Vector<String>();
         Vector<String> columnNames = new Vector<String>();
         columnNames.addElement("Course Title");
         columnNames.addElement("Credit Hours");
@@ -105,10 +104,12 @@ public class Database {
               String courseStatus = tableEnrolment.get(i).getStatus();
             String currSrudentID = tableEnrolment.get(i).getStudentID();
             if(currSrudentID.equals(stdID)&& (courseStatus.equals("PENDING ADD") || courseStatus.equals("PENDING DROP"))){
-                dataVector.add(tableEnrolment.get(i).getCourseTitle());
-                dataVector.add(String.valueOf(tableEnrolment.get(i).getCourseCreditHours()));
-                dataVector.add(tableEnrolment.get(i).getStatus());
-                model.addRow(dataVector);
+                
+                String CourseTitle = tableEnrolment.get(i).getCourseTitle();
+                String CreditHours = String.valueOf(tableEnrolment.get(i).getCourseCreditHours());
+                String Status = tableEnrolment.get(i).getStatus();
+                Object[] data = {CourseTitle, CreditHours, Status};
+                model.addRow(data);
             }
         }
         
@@ -128,10 +129,12 @@ public class Database {
             String currSrudentID = tableEnrolment.get(i).getStudentID();
               String courseStatus = tableEnrolment.get(i).getStatus();
             if(currSrudentID.equals(stdID) && courseStatus.equals(status)){
-                dataVector.add(tableEnrolment.get(i).getCourseTitle());
-                dataVector.add(String.valueOf(tableEnrolment.get(i).getCourseCreditHours()));
-                dataVector.add(tableEnrolment.get(i).getStatus());
-                model.addRow(dataVector);
+                
+                String CourseTitle = tableEnrolment.get(i).getCourseTitle();
+                String CreditHours = String.valueOf(tableEnrolment.get(i).getCourseCreditHours());
+                String Status = tableEnrolment.get(i).getStatus();
+                Object[] data = {CourseTitle, CreditHours, Status};
+                model.addRow(data);
             }
         }
         
