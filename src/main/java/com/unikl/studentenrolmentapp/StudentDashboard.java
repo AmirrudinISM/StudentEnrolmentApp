@@ -80,7 +80,6 @@ public class StudentDashboard extends javax.swing.JFrame {
         tblEnrolledCourses = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        btnDrop = new javax.swing.JButton();
         btnRegisterSemester = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         lblEnrolmentStatus = new javax.swing.JLabel();
@@ -169,8 +168,6 @@ public class StudentDashboard extends javax.swing.JFrame {
 
         jLabel9.setText("Current Enrolment");
 
-        btnDrop.setText("Drop");
-
         btnRegisterSemester.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegisterSemester.setText("Register Semester");
         btnRegisterSemester.addActionListener(new java.awt.event.ActionListener() {
@@ -222,11 +219,9 @@ public class StudentDashboard extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(btnDrop)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(scrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
-                            .addComponent(scrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(scrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                        .addComponent(scrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(35, 35, 35))
         );
         layout.setVerticalGroup(
@@ -281,9 +276,7 @@ public class StudentDashboard extends javax.swing.JFrame {
                         .addComponent(btnSelectCourse)
                         .addGap(18, 18, 18)
                         .addComponent(btnRegisterSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(btnDrop)
-                .addContainerGap())
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         pack();
@@ -331,7 +324,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         
         if(checkdata == null){
             int sum = database.select_SumOfApprovedCreditHours_Where_StudentID(loggedInStudent.getId());
-            System.out.println("before reg" + loggedInStudent.getIsRegistered());
+            System.out.println("before reg" + sum);
             if(sum < 12){
                 showMessageDialog(null, "Credit hours do not meet minimum requirement");     
             }else if(sum >21){
@@ -344,6 +337,7 @@ public class StudentDashboard extends javax.swing.JFrame {
                    lblCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId(),"CURRENTLY TAKING")));
                        lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
                    showMessageDialog(null, "Successfull register the semester");    
+                   btnRegisterSemester.setVisible(false);
             }
             
         }else{
@@ -409,7 +403,6 @@ public class StudentDashboard extends javax.swing.JFrame {
     Database database;
     Student loggedInStudent;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDrop;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnRegisterSemester;
     private javax.swing.JButton btnSelectCourse;
