@@ -122,6 +122,7 @@ public class Student {
     }
 
     public int getRequestedCreditHours() {
+        
         return requestedCreditHours;
     }
 

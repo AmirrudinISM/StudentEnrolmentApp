@@ -35,7 +35,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
         
         if(database.tableEnrolment.size() > 0){
-            tblRequestAddDrop.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId()));
+            tblRequestAddDrop.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(),""));
             tblEnrolledCourses.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(), "CURRENTLY TAKING"));
         }
         lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
@@ -298,10 +298,6 @@ public class StudentDashboard extends javax.swing.JFrame {
             showMessageDialog(null, "You already choose this course");      
         }
         
-       
-        
-        
-        
     }//GEN-LAST:event_btnSelectCourseActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -352,7 +348,7 @@ public class StudentDashboard extends javax.swing.JFrame {
 
                 database.dropCourse(loggedInStudent.getId(),"PENDING DROP",courseTitle);
                 tblEnrolledCourses.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(), "CURRENTLY TAKING"));
-                tblRequestAddDrop.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId()));
+                tblRequestAddDrop.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(),""));
         }
     }//GEN-LAST:event_tblEnrolledCoursesMouseClicked
 

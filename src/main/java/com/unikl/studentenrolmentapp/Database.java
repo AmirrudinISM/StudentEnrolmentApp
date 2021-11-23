@@ -92,31 +92,49 @@ public class Database {
         return currStudent;
     }
     
-    public static DefaultTableModel getRequestedEnrolmentModel(String stdID){
+    public static DefaultTableModel getAdminDashBoardModel(String stdID,String status){
         DefaultTableModel model = new DefaultTableModel();
         Vector<String> columnNames = new Vector<String>();
+        columnNames.addElement("Student ID");
         columnNames.addElement("Course Title");
         columnNames.addElement("Credit Hours");
         columnNames.addElement("Status");
-        model.setColumnIdentifiers(columnNames);
+        model.setColumnIdentifiers(columnNames);  
         
         for (int i = 0; i < tableEnrolment.size(); i++){
-              String courseStatus = tableEnrolment.get(i).getStatus();
             String currSrudentID = tableEnrolment.get(i).getStudentID();
-            if(currSrudentID.equals(stdID)&& (courseStatus.equals("PENDING ADD") || courseStatus.equals("PENDING DROP"))){
-                
-                String CourseTitle = tableEnrolment.get(i).getCourseTitle();
-                String CreditHours = String.valueOf(tableEnrolment.get(i).getCourseCreditHours());
-                String Status = tableEnrolment.get(i).getStatus();
-                Object[] data = {CourseTitle, CreditHours, Status};
-                model.addRow(data);
-            }
+              String courseStatus = tableEnrolment.get(i).getStatus();
+
+              if(status =="CURRENTLY TAKING"){
+
+                    if(currSrudentID.equals(stdID) && courseStatus.equals(status)){
+                        
+                        String StudentId = tableEnrolment.get(i).getStudentID();
+                        String CourseTitle = tableEnrolment.get(i).getCourseTitle();
+                        String CreditHours = String.valueOf(tableEnrolment.get(i).getCourseCreditHours());
+                        String Status = tableEnrolment.get(i).getStatus();
+                        Object[] data = {StudentId, CourseTitle, CreditHours, Status};
+                        model.addRow(data);
+
+                    }
+
+              }else{
+
+                        if(currSrudentID.equals(stdID)&& (courseStatus.equals("PENDING ADD") || courseStatus.equals("PENDING DROP"))){
+                            
+                            String StudentId = tableEnrolment.get(i).getStudentID();
+                            String CourseTitle = tableEnrolment.get(i).getCourseTitle();
+                            String CreditHours = String.valueOf(tableEnrolment.get(i).getCourseCreditHours());
+                            String Status = tableEnrolment.get(i).getStatus();
+                            Object[] data = {StudentId, CourseTitle, CreditHours, Status};
+                            model.addRow(data);
+                }
+            } 
         }
-        
         return model;
     }
     
-        public static DefaultTableModel getRequestedEnrolmentModel(String stdID, String status){
+    public static DefaultTableModel getRequestedEnrolmentModel(String stdID, String status){
         DefaultTableModel model = new DefaultTableModel();
         Vector<String> dataVector = new Vector<String>();
         Vector<String> columnNames = new Vector<String>();
@@ -124,20 +142,35 @@ public class Database {
         columnNames.addElement("Credit Hours");
         columnNames.addElement("Status");
         model.setColumnIdentifiers(columnNames);
-        
+
         for (int i = 0; i < tableEnrolment.size(); i++){
             String currSrudentID = tableEnrolment.get(i).getStudentID();
               String courseStatus = tableEnrolment.get(i).getStatus();
-            if(currSrudentID.equals(stdID) && courseStatus.equals(status)){
-                
-                String CourseTitle = tableEnrolment.get(i).getCourseTitle();
-                String CreditHours = String.valueOf(tableEnrolment.get(i).getCourseCreditHours());
-                String Status = tableEnrolment.get(i).getStatus();
-                Object[] data = {CourseTitle, CreditHours, Status};
-                model.addRow(data);
-            }
+
+              if(status =="CURRENTLY TAKING"){
+
+                    if(currSrudentID.equals(stdID) && courseStatus.equals(status)){
+                        String CourseTitle = tableEnrolment.get(i).getCourseTitle();
+                        String CreditHours = String.valueOf(tableEnrolment.get(i).getCourseCreditHours());
+                        String Status = tableEnrolment.get(i).getStatus();
+                        Object[] data = {CourseTitle, CreditHours, Status};
+                        model.addRow(data);
+
+                    }
+
+              }else{
+
+                        if(currSrudentID.equals(stdID)&& (courseStatus.equals("PENDING ADD") || courseStatus.equals("PENDING DROP"))){
+
+                            String CourseTitle = tableEnrolment.get(i).getCourseTitle();
+                            String CreditHours = String.valueOf(tableEnrolment.get(i).getCourseCreditHours());
+                            String Status = tableEnrolment.get(i).getStatus();
+                            Object[] data = {CourseTitle, CreditHours, Status};
+                            model.addRow(data);
+                }
+            } 
         }
-        
+
         return model;
     }
     
@@ -157,11 +190,22 @@ public class Database {
         for (int i = 0; i < tableStudent.size(); i++){
             
             String studentID = tableStudent.get(i).getId();
-            String studentName = tableStudent.get(i).getName();
-            String studentProgram = tableStudent.get(i).getProgram();
-            int studentCreditHours = tableStudent.get(i).getAccumulatedCreditHours();
-            Object[] data = {studentID, studentName, studentProgram, studentCreditHours};
-            model.addRow(data);
+            
+                for (int y=0; y< tableEnrolment.size(); y++){
+
+                String currSrudentID = tableEnrolment.get(y).getStudentID();
+                String courseStatus = tableEnrolment.get(y).getStatus();
+
+                if(currSrudentID.equals(studentID)&& (courseStatus.equals("PENDING ADD") || courseStatus.equals("PENDING DROP"))){
+                String studentName = tableStudent.get(i).getName();
+                String studentProgram = tableStudent.get(i).getProgram();
+                int studentCreditHours = tableStudent.get(i).getRequestedCreditHours();
+                Object[] data = {studentID, studentName, studentProgram, studentCreditHours};
+                model.addRow(data);
+
+                break;
+                            }
+                }
         }
         
         return model;
@@ -187,6 +231,24 @@ public class Database {
             String courseStatus = tableEnrolment.get(i).getStatus();
             String courseTitle= tableEnrolment.get(i).getCourseTitle();
               if(currSrudentID.equals(stdID) && courseStatus.equals("CURRENTLY TAKING") && courseTitle.equals(title)){
+                
+                tableEnrolment.get(i).setStatus(status);
+                
+            }
+           }
+    }
+    
+    public void ApproveCourse(String stdID, String status, String title){
+        for (int i = 0; i < tableEnrolment.size(); i++){
+            String currSrudentID = tableEnrolment.get(i).getStudentID();
+            String courseStatus = tableEnrolment.get(i).getStatus();
+            String courseTitle= tableEnrolment.get(i).getCourseTitle();
+              if(currSrudentID.equals(stdID) && courseStatus.equals("PENDING ADD") && courseTitle.equals(title)){
+                
+                tableEnrolment.get(i).setStatus(status);
+                
+            }
+              if(currSrudentID.equals(stdID) && courseStatus.equals("PENDING DROP") && courseTitle.equals(title)){
                 
                 tableEnrolment.get(i).setStatus(status);
                 

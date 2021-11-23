@@ -77,6 +77,11 @@ public class AdminDashboard extends javax.swing.JFrame {
                 "Course Name", "Status"
             }
         ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         btnLogout.setText("Logout");
@@ -137,14 +142,59 @@ public class AdminDashboard extends javax.swing.JFrame {
         TableModel model = tblStudents.getModel();
         
         String StudentId = model.getValueAt(index, 0).toString();
-        JOptionPane.showMessageDialog(null, "Student Id:" + StudentId);
+        JOptionPane.showMessageDialog(null, "Student ID:" + StudentId);
         
-        jTable2.setModel(database.getRequestedEnrolmentModel(StudentId));
+        jTable2.setModel(database.getAdminDashBoardModel(StudentId,""));
         
 
-        
-       
     }//GEN-LAST:event_tblStudentsMouseClicked
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+        int index = jTable2.getSelectedRow();
+        TableModel model = jTable2.getModel();
+        String CourseName = model.getValueAt(index,1).toString();
+        String CourseStatus = model.getValueAt(index, 3).toString();
+        
+        Object[] options1 = {
+            "Approve", "Reject", "Cancel"
+        };
+        
+        if (CourseStatus=="PENDING ADD"){
+            int AddApprove = JOptionPane.showOptionDialog(null, 
+                                "Do you want to approve this ADD course " + model.getValueAt(index, 1).toString() + "?",
+                                "Add Course",
+                                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null,options1,null);
+            if(AddApprove == JOptionPane.YES_OPTION){
+                
+                database.ApproveCourse(model.getValueAt(index, 0).toString(), "CURRENTLY TAKING", CourseName);
+                jTable2.setModel(database.getAdminDashBoardModel(model.getValueAt(index, 0).toString(),"PENDING ADD"));
+                tblStudents.setModel(database.getAllFromTableStudent());
+            }
+            if(AddApprove == JOptionPane.NO_OPTION){
+                database.ApproveCourse(model.getValueAt(index, 0).toString(), "REJECTED DROP", CourseName);
+                jTable2.setModel(database.getAdminDashBoardModel(model.getValueAt(index, 0).toString(),"PENDING ADD"));
+                tblStudents.setModel(database.getAllFromTableStudent());
+            }
+        }
+        else if(CourseStatus=="PENDING DROP"){
+            int DropApprove = JOptionPane.showOptionDialog(null, 
+                                "Do you want to approve this ADD course " + model.getValueAt(index, 1).toString() + "?",
+                                "Add Course",
+                                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null,options1,null);
+            if(DropApprove == JOptionPane.YES_OPTION){
+                
+                database.ApproveCourse(model.getValueAt(index, 0).toString(), "APPROVED DROP", CourseName);
+                jTable2.setModel(database.getAdminDashBoardModel(model.getValueAt(index, 0).toString(),"PENDING DROP"));
+                tblStudents.setModel(database.getAllFromTableStudent());
+            }
+            if(DropApprove == JOptionPane.NO_OPTION){
+                database.ApproveCourse(model.getValueAt(index, 0).toString(), "CURRENTLY TAKING", CourseName);
+                jTable2.setModel(database.getAdminDashBoardModel(model.getValueAt(index, 0).toString(),"PENDING DROP"));
+                tblStudents.setModel(database.getAllFromTableStudent());
+            }
+        }
+    }//GEN-LAST:event_jTable2MouseClicked
 
     /**
      * @param args the command line arguments
