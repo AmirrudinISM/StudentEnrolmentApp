@@ -26,16 +26,10 @@ public class Database {
     private static Database database = new Database();
     
     private Database() {
-        Student test1 = new Student("000","John Smith","Bachelor of Information Technology (Hons.) in Software Engineering");
-        tableStudent.add(test1);
-        Student test2 = new Student("000","Jane Doe","Bachelor of Information Technology (Hons) in Computer System Security");
-        tableStudent.add(test2);
-        Student test3 = new Student("000","Alex Jones","Bachelor of Multimedia Technology (Hons.) in Computer Animation");
-        tableStudent.add(test3);
+        
         tableStudent.add(new Student("000000","asd","Test Student", "Test Program"));
         
-        Enrolment testEnrolment = new Enrolment("000000","ISB42603","ADVANCED PROGRAMMING",3,"CURRENTLY TAKING"); 
-        tableEnrolment.add(testEnrolment);
+        
        
         
         Course course1 = new Course("ISB42603", "ADVANCED PROGRAMMING", 3, "Learn Full-stack development using ASP.NET core MVC Framework");
@@ -55,7 +49,12 @@ public class Database {
         tableCourse.add(new Course("WBB20103","TECHNOPRENEURSHIP",3,""));
         tableCourse.add(new Course("IKB20803","COMPUTER ORGANIZATION",3,""));
         tableCourse.add(new Course("MPU3113","HUBUNGAN ETNIK",3,""));
-        tableCourse.add(new Course("IDB10103","	INTRODUCTION TO COMPUTING AND INFORMATION SYSTEMS",3,""));
+        tableCourse.add(new Course("IDB10103","INTRODUCTION TO COMPUTING AND INFORMATION SYSTEMS",3,""));
+        tableCourse.add(new Course("ISB16003","OBJECT-ORIENTED PROGRAMMING",3,""));
+        tableCourse.add(new Course("MPU3242","INNOVATION MANAGEMENT",2,""));
+        tableCourse.add(new Course("WMD10201","MANDARIN 2",1,""));
+        tableCourse.add(new Course("WBB20103","TECHNOPRENEURSHIP",3,""));
+        tableCourse.add(new Course("ISB37503","REAL TIME AND EMBEDDED SYSTEMS",3,""));
         
         
     }
@@ -199,7 +198,7 @@ public class Database {
                 if(currSrudentID.equals(studentID)&& (courseStatus.equals("PENDING ADD") || courseStatus.equals("PENDING DROP"))){
                 String studentName = tableStudent.get(i).getName();
                 String studentProgram = tableStudent.get(i).getProgram();
-                int studentCreditHours = tableStudent.get(i).getRequestedCreditHours();
+                int studentCreditHours = select_SumOfApprovedCreditHours_Where_StudentID(studentID);
                 Object[] data = {studentID, studentName, studentProgram, studentCreditHours};
                 model.addRow(data);
 
@@ -256,17 +255,31 @@ public class Database {
            }
     }
     
-        public static int select_SumOfRequestedCreditHours_Where_StudentID(String stdID, String status){
-            int sum = 0;
-            for (int i = 0; i < tableEnrolment.size(); i++){
-                String currSrudentID = tableEnrolment.get(i).getStudentID();
-                String courseStatus = tableEnrolment.get(i).getStatus();
+    public static int select_SumOfRequestedCreditHours_Where_StudentID(String stdID, String status){
+        int sum = 0;
+        for (int i = 0; i < tableEnrolment.size(); i++){
+            String currSrudentID = tableEnrolment.get(i).getStudentID();
+            String courseStatus = tableEnrolment.get(i).getStatus();
+
+            if(currSrudentID.equals(stdID) && courseStatus.equals(status)){
+
+                sum += tableEnrolment.get(i).getCourseCreditHours();
+
+            }
+        }
+        return sum;
+    }
+    
+    public static int select_SumOfApprovedCreditHours_Where_StudentID(String stdID){
+        int sum = 0;
+        for (int i = 0; i < tableEnrolment.size(); i++){
+            String currSrudentID = tableEnrolment.get(i).getStudentID();
+            String courseStatus = tableEnrolment.get(i).getStatus();
+            if(currSrudentID.equals(stdID) && courseStatus.equals("CURRENTLY TAKING")){
                 
-                if(currSrudentID.equals(stdID) && courseStatus.equals(status)){
+                sum += tableEnrolment.get(i).getCourseCreditHours();
                 
-                    sum += tableEnrolment.get(i).getCourseCreditHours();
-                
-                }
+            }
         }
         return sum;
     }

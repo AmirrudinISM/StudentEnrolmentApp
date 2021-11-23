@@ -48,7 +48,7 @@ public class Student {
         this.program  = program;
         this.accumulatedCreditHours = 0;
         this.requestedCreditHours = 0;
-        
+        this.isRegistered=false;
     }
     
     public Student(String id,String password, String name, String program) {
@@ -58,6 +58,7 @@ public class Student {
         this.program  = program;
         this.accumulatedCreditHours = 0;
         this.requestedCreditHours = 0;
+        this.isRegistered=false;
     }
     
     @Override

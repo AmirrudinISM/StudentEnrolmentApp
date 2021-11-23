@@ -26,6 +26,13 @@ public class StudentDashboard extends javax.swing.JFrame {
     
     public StudentDashboard(Database database, Student loggedInStudent) {
         initComponents();
+        if (loggedInStudent.getIsRegistered()){
+            lblEnrolmentStatus.setText("REGISTERED");
+        }
+        else{
+            lblEnrolmentStatus.setText("NOT YET REGISTERED");
+        }
+        
         this.database = database;
         this.loggedInStudent = loggedInStudent;
         lblID.setText(loggedInStudent.getId());
@@ -75,6 +82,8 @@ public class StudentDashboard extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         btnDrop = new javax.swing.JButton();
         btnRegisterSemester = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        lblEnrolmentStatus = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -144,7 +153,7 @@ public class StudentDashboard extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3"
+                "Course Title", "Credit Hours", "Status"
             }
         ));
         tblEnrolledCourses.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -170,6 +179,10 @@ public class StudentDashboard extends javax.swing.JFrame {
             }
         });
 
+        jLabel10.setText("Enrolled:");
+
+        lblEnrolmentStatus.setText("jLabel11");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -189,14 +202,16 @@ public class StudentDashboard extends javax.swing.JFrame {
                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel6)
-                                    .addComponent(jLabel7))
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel10))
                                 .addGap(28, 28, 28)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(lblName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(lblProgram, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(lblID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(lblCreditHours, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblRequestedCreditHours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(lblRequestedCreditHours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblEnrolmentStatus, javax.swing.GroupLayout.Alignment.LEADING)))
                             .addComponent(btnRegisterSemester, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(49, 49, 49)
@@ -227,16 +242,13 @@ public class StudentDashboard extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel8)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(scrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                        .addComponent(btnDrop)
-                        .addContainerGap())
+                        .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -258,14 +270,20 @@ public class StudentDashboard extends javax.swing.JFrame {
                             .addComponent(jLabel7)
                             .addComponent(lblRequestedCreditHours))
                         .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(lblEnrolmentStatus))
+                        .addGap(32, 32, 32)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dropDownCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnSelectCourse)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegisterSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(69, 69, 69))))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRegisterSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(btnDrop)
+                .addContainerGap())
         );
 
         pack();
@@ -308,20 +326,20 @@ public class StudentDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnRegisterSemesterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterSemesterActionPerformed
-        // TODO add your handling code here:
-            var checkdata= database.tableEnrolment.stream().filter(x -> x.getStudentID().equalsIgnoreCase(loggedInStudent.getId()) && x.getStatus().equals("PENDING ")).findFirst().orElse(null);
+        
+        var checkdata= database.tableEnrolment.stream().filter(x -> x.getStudentID().equalsIgnoreCase(loggedInStudent.getId()) && x.getStatus().equals("PENDING ")).findFirst().orElse(null);
         
         if(checkdata == null){
-   
-          System.out.println("before reg" + loggedInStudent.getIsRegistered());
-            if(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId()) < 12){
+            int sum = database.select_SumOfApprovedCreditHours_Where_StudentID(loggedInStudent.getId());
+            System.out.println("before reg" + loggedInStudent.getIsRegistered());
+            if(sum < 12){
                 showMessageDialog(null, "Credit hours do not meet minimum requirement");     
-            }else if(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId()) >21){
+            }else if(sum >21){
                 showMessageDialog(null, "Exceed credit hours requirement");     
             }else{
                      //do semester registration
                    loggedInStudent.setIsRegistered(true);
-                           
+                   lblEnrolmentStatus.setText("REGISTERED");
                    System.out.println("Registered" + loggedInStudent.getIsRegistered());
                    lblCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId(),"CURRENTLY TAKING")));
                        lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
@@ -397,6 +415,7 @@ public class StudentDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnSelectCourse;
     private javax.swing.JComboBox<Course> dropDownCourse;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -408,6 +427,7 @@ public class StudentDashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCreditHours;
+    private javax.swing.JLabel lblEnrolmentStatus;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblProgram;
