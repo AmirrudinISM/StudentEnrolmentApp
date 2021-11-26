@@ -14,6 +14,7 @@ import javax.swing.table.TableModel;
  */
 public class AdminDashboard extends javax.swing.JFrame {
 
+  AdminController controller;
     /**
      * Creates new form AdminDashboard
      */
@@ -24,6 +25,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     public AdminDashboard(Database database) {
         initComponents();
         this.database = database;
+        controller = new AdminController(database);
         tblStudents.setModel(database.getAllFromTableStudent());
     }
 
@@ -167,12 +169,12 @@ public class AdminDashboard extends javax.swing.JFrame {
                                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null,options1,null);
             if(AddApprove == JOptionPane.YES_OPTION){
                 
-                database.ApproveCourse(model.getValueAt(index, 0).toString(), "CURRENTLY TAKING", CourseName);
+                controller.ApproveCourse(model.getValueAt(index, 0).toString(), "CURRENTLY TAKING", CourseName);
                 jTable2.setModel(database.getAdminDashBoardModel(model.getValueAt(index, 0).toString(),"PENDING ADD"));
                 tblStudents.setModel(database.getAllFromTableStudent());
             }
             if(AddApprove == JOptionPane.NO_OPTION){
-                database.ApproveCourse(model.getValueAt(index, 0).toString(), "REJECTED DROP", CourseName);
+                controller.ApproveCourse(model.getValueAt(index, 0).toString(), "REJECTED DROP", CourseName);
                 jTable2.setModel(database.getAdminDashBoardModel(model.getValueAt(index, 0).toString(),"PENDING ADD"));
                 tblStudents.setModel(database.getAllFromTableStudent());
             }
@@ -184,12 +186,12 @@ public class AdminDashboard extends javax.swing.JFrame {
                                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null,options1,null);
             if(DropApprove == JOptionPane.YES_OPTION){
                 
-                database.ApproveCourse(model.getValueAt(index, 0).toString(), "APPROVED DROP", CourseName);
+                controller.ApproveCourse(model.getValueAt(index, 0).toString(), "APPROVED DROP", CourseName);
                 jTable2.setModel(database.getAdminDashBoardModel(model.getValueAt(index, 0).toString(),"PENDING DROP"));
                 tblStudents.setModel(database.getAllFromTableStudent());
             }
             if(DropApprove == JOptionPane.NO_OPTION){
-                database.ApproveCourse(model.getValueAt(index, 0).toString(), "CURRENTLY TAKING", CourseName);
+                controller.ApproveCourse(model.getValueAt(index, 0).toString(), "CURRENTLY TAKING", CourseName);
                 jTable2.setModel(database.getAdminDashBoardModel(model.getValueAt(index, 0).toString(),"PENDING DROP"));
                 tblStudents.setModel(database.getAllFromTableStudent());
             }

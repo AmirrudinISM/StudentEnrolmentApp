@@ -17,6 +17,9 @@ import javax.swing.table.TableModel;
  */
 public class StudentDashboard extends javax.swing.JFrame {
 
+    
+     StudentController controller;
+        
     /**
      * Creates new form StudentDashboard
      */
@@ -26,6 +29,8 @@ public class StudentDashboard extends javax.swing.JFrame {
     
     public StudentDashboard(Database database, Student loggedInStudent) {
         initComponents();
+         controller = new StudentController(database);
+        
         if (loggedInStudent.getIsRegistered()){
             lblEnrolmentStatus.setText("REGISTERED");
             
@@ -288,28 +293,28 @@ public class StudentDashboard extends javax.swing.JFrame {
         
         //get course object from dropdown table
         Course selectedCourse = (Course) dropDownCourse.getSelectedItem();
-        //do checking first
-
-        var checkdata= database.tableEnrolment.stream().filter(x -> x.getStudentID().equalsIgnoreCase(loggedInStudent.getId()) && x.getCourseID().equalsIgnoreCase(selectedCourse.getId())).findFirst().orElse(null);
-         System.out.println("run" + checkdata);
-        if(checkdata == null){
-            //create new enrolment record
-            Enrolment enrolment = new Enrolment(loggedInStudent.getId(),selectedCourse.getId(), selectedCourse.getTitle(), selectedCourse.getCreditHour(), "PENDING ADD");
-            database.tableEnrolment.add(enrolment);
-            database.printTable("ENROLMENT");
     
-            
-            //create new object to be written to the table view
-            Object courseData[] = {selectedCourse.getTitle(), selectedCourse.getCreditHour(), enrolment.getStatus()};
-            DefaultTableModel tblModel = (DefaultTableModel)tblRequestAddDrop.getModel();
-            tblModel.addRow(courseData);
-            lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
-        
+       
       
+        if(controller.checkStudentAddCourse(loggedInStudent.getId(),selectedCourse.getId())){
+            
+              Enrolment enrolment = new Enrolment(loggedInStudent.getId(),selectedCourse.getId(), selectedCourse.getTitle(), selectedCourse.getCreditHour(), "PENDING ADD");
+              
+                if(controller.StudentAddCourse(loggedInStudent.getId(),selectedCourse.getId(), selectedCourse.getTitle(), selectedCourse.getCreditHour() ,enrolment.getStatus())){
+                    
+                    database.printTable("ENROLMENT");
+                    
+                    Object courseData[] = {selectedCourse.getTitle(), selectedCourse.getCreditHour(),enrolment.getStatus()};
+                    DefaultTableModel tblModel = (DefaultTableModel)tblRequestAddDrop.getModel();
+                    tblModel.addRow(courseData);
+                    lblRequestedCreditHours.setText(String.valueOf(database.select_SumOfRequestedCreditHours_Where_StudentID(loggedInStudent.getId())));
+                }
+                
         }else{
-          
-            showMessageDialog(null, "You already choose this course");      
-        }
+            
+              showMessageDialog(null, "You already choose this course"); 
+              
+        }  
         
     }//GEN-LAST:event_btnSelectCourseActionPerformed
 
@@ -359,10 +364,14 @@ public class StudentDashboard extends javax.swing.JFrame {
                                   JOptionPane.YES_NO_OPTION); 
         
         if (dropConfirmation == JOptionPane.YES_OPTION) {
+            
+               //  public boolean execute(Database database,String StudentId, String SelectedCourseId,String SelectedCourseTitle,int SelectedCourseCredit, String status);
+                if(controller.StudentDropCouse(loggedInStudent.getId(),"",courseTitle,-1,"PENDING DROP")){
+                    
+                        tblEnrolledCourses.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(), "CURRENTLY TAKING"));
+                        tblRequestAddDrop.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(),""));
+                }
 
-                database.dropCourse(loggedInStudent.getId(),"PENDING DROP",courseTitle);
-                tblEnrolledCourses.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(), "CURRENTLY TAKING"));
-                tblRequestAddDrop.setModel(database.getRequestedEnrolmentModel(loggedInStudent.getId(),""));
         }
     }//GEN-LAST:event_tblEnrolledCoursesMouseClicked
 

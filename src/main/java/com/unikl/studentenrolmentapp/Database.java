@@ -224,36 +224,9 @@ public class Database {
         return sum;
     }
     
-    public void dropCourse(String stdID,String status, String title){
-           for (int i = 0; i < tableEnrolment.size(); i++){
-            String currSrudentID = tableEnrolment.get(i).getStudentID();
-            String courseStatus = tableEnrolment.get(i).getStatus();
-            String courseTitle= tableEnrolment.get(i).getCourseTitle();
-              if(currSrudentID.equals(stdID) && courseStatus.equals("CURRENTLY TAKING") && courseTitle.equals(title)){
-                
-                tableEnrolment.get(i).setStatus(status);
-                
-            }
-           }
-    }
+  
     
-    public void ApproveCourse(String stdID, String status, String title){
-        for (int i = 0; i < tableEnrolment.size(); i++){
-            String currSrudentID = tableEnrolment.get(i).getStudentID();
-            String courseStatus = tableEnrolment.get(i).getStatus();
-            String courseTitle= tableEnrolment.get(i).getCourseTitle();
-              if(currSrudentID.equals(stdID) && courseStatus.equals("PENDING ADD") && courseTitle.equals(title)){
-                
-                tableEnrolment.get(i).setStatus(status);
-                
-            }
-              if(currSrudentID.equals(stdID) && courseStatus.equals("PENDING DROP") && courseTitle.equals(title)){
-                
-                tableEnrolment.get(i).setStatus(status);
-                
-            }
-           }
-    }
+
     
     public static int select_SumOfRequestedCreditHours_Where_StudentID(String stdID, String status){
         int sum = 0;
