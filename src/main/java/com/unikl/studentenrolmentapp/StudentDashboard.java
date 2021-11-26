@@ -28,6 +28,8 @@ public class StudentDashboard extends javax.swing.JFrame {
         initComponents();
         if (loggedInStudent.getIsRegistered()){
             lblEnrolmentStatus.setText("REGISTERED");
+            
+             btnRegisterSemester.setVisible(false);
         }
         else{
             lblEnrolmentStatus.setText("NOT YET REGISTERED");
